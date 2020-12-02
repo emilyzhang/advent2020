@@ -1,0 +1,6 @@
+cradle:
+  cabal:
+    - path: './cmd'
+      component: 'exe:advent2020'
+    - path: './src'
+      component: 'lib:advent2020'
