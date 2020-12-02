@@ -1,6 +1,5 @@
-module Advent2020.Day1 (run, part1) where
+module Advent2020.Day1 (run, part1, part2) where
 
-import Data.List.Split
 import Relude
 import Relude.Unsafe (fromJust, read)
 
@@ -14,5 +13,12 @@ run file runner = do
 part1 :: [Int] -> Int
 part1 entries = let (x, y) = fromJust $ find (\(a, b) -> a + b == 2020) (pairs entries) in x * y
 
+part2 :: [Int] -> Int
+part2 entries = let (x, y, z) = fromJust $ find (\(a, b, c) -> a + b + c == 2020) (triples entries) in x * y * z
+
 pairs :: [a] -> [(a, a)]
 pairs l = [(x, y) | (x : ys) <- tails l, y <- ys]
+
+triples :: [a] -> [(a, a, a)]
+triples (x : xs) = map (\(y, z) -> (x, y, z)) (pairs xs) ++ triples xs
+triples [] = []

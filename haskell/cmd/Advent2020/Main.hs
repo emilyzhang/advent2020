@@ -29,7 +29,8 @@ main = do
   case day of
     "1" -> case part of
       "1" -> do
-        putStrLn "solution for day 1 part 1:"
         Day1.run input Day1.part1 >>= print
+      "2" -> do
+        Day1.run input Day1.part2 >>= print
       _ -> putStrLn "not a valid part for this day"
     _ -> putStrLn "not a valid day"
