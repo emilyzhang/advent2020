@@ -11,21 +11,8 @@ run file runner = do
   let xs = map ((\x -> read x :: Int) . toString) ls
   return $ runner xs
 
-run' :: FilePath -> ([Int] -> Int) -> Int
-run' file runner = undefined
-  where
+part1 :: [Int] -> Int
+part1 entries = let (x, y) = fromJust $ find (\(a, b) -> a + b == 2020) (pairs entries) in x * y
 
--- contents =
-
-id' :: t -> t
-id' x = x
-
-foo = id' 5
-
-readFileAbsurd :: FilePath -> Text
-readFileAbsurd filepath = undefined
-
-part1 :: (MonadIO m) => Text -> m Text
-part1 input = do
-  print input
-  return "hello"
+pairs :: [a] -> [(a, a)]
+pairs l = [(x, y) | (x : ys) <- tails l, y <- ys]
