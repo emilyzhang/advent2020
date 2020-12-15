@@ -94,4 +94,8 @@ check PasswordCheck {..} = do
 part1 :: Text -> Either Text Int
 part1 input = do
   passwords <- parse input
-  undefined
+  let validPasswords = check <$> passwords
+  return $ foldr f 0 validPasswords
+  where
+    f True i = i + 1
+    f False i = i
