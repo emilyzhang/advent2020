@@ -40,7 +40,7 @@ main = do
     "2" -> case part of
       "1" -> do
         Day2.run input Day2.part1 >>= print
-      -- "2" -> do
-      -- Day1.run input Day1.part2 >>= print
+      "2" -> do
+        Day2.run input Day2.part2 >>= print
       _ -> invalidPart
     _ -> putStrLn "not a valid day"

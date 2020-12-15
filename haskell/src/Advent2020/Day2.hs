@@ -1,9 +1,9 @@
 {-# LANGUAGE TypeApplications #-}
 
-module Advent2020.Day2 (part1, run) where
+module Advent2020.Day2 (part1, part2, run) where
 
 import Data.Either.Extra (mapLeft)
-import Data.Text (foldl)
+import Data.Text (foldl, index)
 import Relude
 import Text.Megaparsec (Parsec, eof, errorBundlePretty, runParser, someTill)
 import Text.Megaparsec.Char
@@ -33,7 +33,8 @@ run file runner = do
     Right i -> return i
 
 parse :: Text -> Either Text [PasswordCheck]
-parse input = traceShowId (mapLeft (toText . errorBundlePretty) $ runParser (passwordCheckParser `someTill` eof) "" input)
+-- parse input = traceShowId (mapLeft (toText . errorBundlePretty) $ runParser (passwordCheckParser `someTill` eof) "" input)
+parse input = mapLeft (toText . errorBundlePretty) $ runParser (passwordCheckParser `someTill` eof) "" input
 
 bundle :: [Either b a] -> Either b [a]
 bundle l = foldr f (Right []) l
@@ -91,11 +92,26 @@ check PasswordCheck {..} = do
             then count + 1
             else count
 
+checkPosition :: PasswordCheck -> Bool
+checkPosition PasswordCheck {..} = atPosition (p !!? (minLetters - 1)) /= atPosition (p !!? (maxLetters - 1))
+  where
+    p = toString password
+    atPosition :: Maybe Char -> Bool
+    atPosition Nothing = False
+    atPosition (Just c) = c == character
+
+countValid :: Bool -> Int -> Int
+countValid True i = i + 1
+countValid False i = i
+
 part1 :: Text -> Either Text Int
 part1 input = do
   passwords <- parse input
   let validPasswords = check <$> passwords
-  return $ foldr f 0 validPasswords
-  where
-    f True i = i + 1
-    f False i = i
+  return $ foldr countValid 0 validPasswords
+
+part2 :: Text -> Either Text Int
+part2 input = do
+  passwords <- parse input
+  let validPasswords = checkPosition <$> passwords
+  return $ foldr countValid 0 validPasswords
